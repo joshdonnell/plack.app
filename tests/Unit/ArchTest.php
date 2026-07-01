@@ -13,4 +13,8 @@ arch('controllers')
     ->expect('App\Http\Controllers')
     ->not->toBeUsed();
 
+arch('notifications are queued')
+    ->expect('App\Notifications')
+    ->toImplement(Illuminate\Contracts\Queue\ShouldQueue::class);
+
 //

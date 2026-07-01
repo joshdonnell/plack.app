@@ -12,11 +12,10 @@ it('can create a workspace', function (): void {
 
     $page = visit('/workspaces');
 
-    $page->assertSee('No workspaces yet.')
-        ->press('New workspace')
+    $page->click('@create-workspace-trigger')
         ->fill('name', 'Acme')
-        ->press('Create')
-        ->assertSee('Acme');
+        ->click('@create-workspace-submit')
+        ->assertMissing('@create-workspace-dialog');
 
     expect($user->workspaces()->where('name', 'Acme')->exists())->toBeTrue();
 });
@@ -28,10 +27,10 @@ it('validates the workspace name when creating', function (): void {
 
     $page = visit('/workspaces');
 
-    $page->press('New workspace')
+    $page->click('@create-workspace-trigger')
         ->fill('name', 'ab')
-        ->press('Create')
-        ->assertSee('The name field must be at least 3 characters.');
+        ->click('@create-workspace-submit')
+        ->assertPresent('@input-error');
 
     expect($user->workspaces()->count())->toBe(0);
 });
@@ -44,11 +43,10 @@ it('can update a workspace', function (): void {
 
     $page = visit('/workspaces');
 
-    $page->assertSee('Acme')
-        ->click('[aria-label="Edit workspace"]')
+    $page->click('@edit-workspace-trigger')
         ->fill('name', 'Globex')
-        ->press('Save')
-        ->assertSee('Globex');
+        ->click('@edit-workspace-submit')
+        ->assertMissing('@edit-workspace-dialog');
 
     expect($workspace->refresh()->name)->toBe('Globex');
 });

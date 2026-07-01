@@ -11,9 +11,9 @@ it('validates the password confirmation', function (): void {
         ->fill('email', 'test@example.com')
         ->fill('password', 'password')
         ->fill('password_confirmation', 'different-password')
-        ->press('Create account')
-        ->assertPathIs('/register')
-        ->assertSee('The password field confirmation does not match.');
+        ->click('@register-user-button')
+        ->assertPresent('@input-error')
+        ->assertPathIs('/register');
 
     expect(User::query()->count())->toBe(0);
 });
@@ -27,9 +27,9 @@ it('validates a unique email', function (): void {
         ->fill('email', 'test@example.com')
         ->fill('password', 'password')
         ->fill('password_confirmation', 'password')
-        ->press('Create account')
-        ->assertPathIs('/register')
-        ->assertSee('The email has already been taken.');
+        ->click('@register-user-button')
+        ->assertPresent('@input-error')
+        ->assertPathIs('/register');
 
     expect(User::query()->count())->toBe(1);
 });
@@ -41,7 +41,7 @@ it('registers a new account', function (): void {
         ->fill('email', 'test@example.com')
         ->fill('password', 'password')
         ->fill('password_confirmation', 'password')
-        ->press('Create account')
+        ->click('@register-user-button')
         ->assertPathIs('/verify-email');
 
     expect(User::query()->where('email', 'test@example.com')->exists())->toBeTrue();

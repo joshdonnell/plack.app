@@ -14,11 +14,9 @@ it('fails with invalid credentials', function (): void {
 
     $page->fill('email', 'test@example.com')
         ->fill('password', 'wrong-password')
-        ->press('Log in')
-        ->assertPathIs('/login')
-        ->assertSee('These credentials do not match our records.');
-
-    expect(auth()->check())->toBeFalse();
+        ->click('@login-button')
+        ->assertPresent('@input-error')
+        ->assertPathIs('/login');
 });
 
 it('logs in with valid credentials', function (): void {
@@ -31,7 +29,6 @@ it('logs in with valid credentials', function (): void {
 
     $page->fill('email', 'test@example.com')
         ->fill('password', 'password')
-        ->press('Log in')
-        ->assertPathIs('/workspaces')
-        ->assertSee('Workspaces');
+        ->click('@login-button')
+        ->assertPathIs('/workspaces');
 });

@@ -5,51 +5,43 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonInterface;
-use Database\Factories\WorkspaceFactory;
+use Database\Factories\MessageFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use NunoMaduro\LaravelSluggable\Attributes\Sluggable;
 
 /**
  * @property-read string $id
+ * @property-read string $channel_id
  * @property-read string $user_id
- * @property-read string $name
- * @property-read string $slug
+ * @property-read string $body
  * @property-read CarbonInterface $created_at
  * @property-read CarbonInterface $updated_at
  */
-#[Sluggable(from: 'name')]
-final class Workspace extends Model
+final class Message extends Model
 {
     /**
-     * @use HasFactory<WorkspaceFactory>
+     * @use HasFactory<MessageFactory>
      */
     use HasFactory;
 
     use HasUuids;
 
-    public function getRouteKeyName(): string
+    /**
+     * @return BelongsTo<Channel, $this>
+     */
+    public function channel(): BelongsTo
     {
-        return 'slug';
+        return $this->belongsTo(Channel::class);
     }
 
     /**
      * @return BelongsTo<User, $this>
      */
-    public function owner(): BelongsTo
+    public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * @return HasMany<Channel, $this>
-     */
-    public function channels(): HasMany
-    {
-        return $this->hasMany(Channel::class);
     }
 
     /**
@@ -59,9 +51,9 @@ final class Workspace extends Model
     {
         return [
             'id' => 'string',
+            'channel_id' => 'string',
             'user_id' => 'string',
-            'name' => 'string',
-            'slug' => 'string',
+            'body' => 'string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];

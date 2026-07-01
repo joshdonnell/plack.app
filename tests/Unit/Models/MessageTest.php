@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use App\Models\Workspace;
+use App\Models\Message;
 
 test('to array', function (): void {
-    $workspace = Workspace::factory()->create()->fresh();
+    $message = Message::factory()->create()->fresh();
 
-    expect(array_keys($workspace->toArray()))
+    expect(array_keys($message->toArray()))
         ->toBe([
             'id',
+            'channel_id',
             'user_id',
-            'name',
+            'body',
             'created_at',
             'updated_at',
-            'slug',
         ]);
 });

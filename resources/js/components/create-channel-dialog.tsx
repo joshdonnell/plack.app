@@ -1,7 +1,7 @@
 import { Form } from '@inertiajs/react';
-import { Pencil } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
-import WorkspaceController from '@/actions/App/Http/Controllers/WorkspaceController';
+import ChannelController from '@/actions/App/Http/Controllers/ChannelController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,74 +16,50 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-type Workspace = {
-    id: string;
-    name: string;
-    slug: string;
-};
-
-export default function EditWorkspaceDialog({
-    workspace,
+export default function CreateChannelDialog({
+    workspaceSlug,
 }: {
-    workspace: Workspace;
+    workspaceSlug: string;
 }) {
     const [open, setOpen] = useState(false);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Edit workspace"
-                    data-test="edit-workspace-trigger"
-                >
-                    <Pencil />
+                <Button>
+                    <Plus />
+                    New channel
                 </Button>
             </DialogTrigger>
-            <DialogContent data-test="edit-workspace-dialog">
-                <DialogTitle>Edit workspace</DialogTitle>
+            <DialogContent>
+                <DialogTitle>Create channel</DialogTitle>
                 <DialogDescription>
-                    Update the name and slug of your workspace.
+                    Enter a name for your new channel.
                 </DialogDescription>
 
                 <Form
-                    {...WorkspaceController.update.form(workspace.slug)}
+                    {...ChannelController.store.form(workspaceSlug)}
                     options={{
                         preserveScroll: true,
                     }}
                     onSuccess={() => setOpen(false)}
+                    resetOnSuccess
                     className="space-y-6"
                 >
                     {({ processing, errors, resetAndClearErrors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Workspace name</Label>
+                                <Label htmlFor="name">Channel name</Label>
 
                                 <Input
                                     id="name"
                                     name="name"
-                                    defaultValue={workspace.name}
-                                    placeholder="My workspace"
+                                    placeholder="general"
                                     autoComplete="off"
                                     autoFocus
                                 />
 
                                 <InputError message={errors.name} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="slug">Workspace slug</Label>
-
-                                <Input
-                                    id="slug"
-                                    name="slug"
-                                    defaultValue={workspace.slug}
-                                    placeholder="my-workspace"
-                                    autoComplete="off"
-                                />
-
-                                <InputError message={errors.slug} />
                             </div>
 
                             <DialogFooter className="gap-2">
@@ -96,12 +72,8 @@ export default function EditWorkspaceDialog({
                                     </Button>
                                 </DialogClose>
 
-                                <Button
-                                    type="submit"
-                                    disabled={processing}
-                                    data-test="edit-workspace-submit"
-                                >
-                                    Save
+                                <Button type="submit" disabled={processing}>
+                                    Create
                                 </Button>
                             </DialogFooter>
                         </>

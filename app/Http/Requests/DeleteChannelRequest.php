@@ -9,7 +9,7 @@ use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class DeleteWorkspaceRequest extends FormRequest
+final class DeleteChannelRequest extends FormRequest
 {
     public function authorize(#[RouteParameter('workspace')] Workspace $workspace): bool
     {

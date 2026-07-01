@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailResetNotificationController;
@@ -32,6 +33,21 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
         Route::delete('workspaces/{workspace}', [WorkspaceController::class, 'destroy'])
             ->name('workspace.destroy');
+
+        // Channels...
+        Route::post('workspaces/{workspace}/channels', [ChannelController::class, 'store'])
+            ->name('channel.store');
+
+        Route::scopeBindings()->group(function (): void {
+            Route::get('workspaces/{workspace}/channels/{channel}', [ChannelController::class, 'show'])
+                ->name('channel.show');
+
+            Route::patch('workspaces/{workspace}/channels/{channel}', [ChannelController::class, 'update'])
+                ->name('channel.update');
+
+            Route::delete('workspaces/{workspace}/channels/{channel}', [ChannelController::class, 'destroy'])
+                ->name('channel.destroy');
+        });
     });
 });
 
@@ -75,6 +91,7 @@ Route::middleware('guest')->group(function (): void {
     Route::get('forgot-password', [UserEmailResetNotificationController::class, 'create'])
         ->name('password.request');
     Route::post('forgot-password', [UserEmailResetNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
         ->name('password.email');
 
     // Session...

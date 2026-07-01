@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function (): void {
 
     // User Email Verification...
     Route::get('verify-email/{id}/{hash}', [UserEmailVerificationController::class, 'update'])
-        ->middleware(['signed', 'throttle:6,1'])
+        ->middleware(['bento.signature', 'signed', 'throttle:6,1'])
         ->name('verification.verify');
 
     // Session...

@@ -5,20 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Models\Workspace;
+use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 final class UpdateWorkspaceRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize(#[RouteParameter('workspace')] Workspace $workspace): bool
     {
-        $workspace = $this->route('workspace');
-        assert($workspace instanceof Workspace);
-
         return $workspace->user_id === $this->user()?->id;
     }
 

@@ -54,9 +54,9 @@ it('validates the workspace name', function (): void {
     expect($user->workspaces()->count())->toBe(0);
 });
 
-it('can update workspace name', function () {
+it('can update workspace name', function (): void {
     $user = User::factory()->create();
-    $workspace = Workspace::factory()->for($user)->create(['name' => 'Hashane']);
+    $workspace = Workspace::factory()->for($user, 'owner')->create(['name' => 'Hashane']);
 
     $response = $this->actingAs($user)->patch(route('workspace.update', $workspace), [
         'name' => 'Nuno Maduro',

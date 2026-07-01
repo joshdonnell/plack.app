@@ -10,8 +10,6 @@ use App\Http\Requests\CreateWorkspaceRequest;
 use App\Http\Requests\UpdateWorkspaceRequest;
 use App\Models\User;
 use App\Models\Workspace;
-use Illuminate\Container\Attributes\CurrentUser;
-use Illuminate\Http\RedirectResponse;
 use App\Queries\ListWorkspace;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;

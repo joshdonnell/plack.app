@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\SendMessage;
+use App\Actions\CreateMessage;
 use App\Models\Channel;
 use App\Models\Message;
 use App\Models\User;
@@ -11,7 +11,7 @@ it('may send messages', function (): void {
     $channel = Channel::factory()->create();
     $sender = User::factory()->create();
 
-    $message = resolve(SendMessage::class)->handle(
+    $message = resolve(CreateMessage::class)->handle(
         $channel,
         $sender,
         'Hello, world!',

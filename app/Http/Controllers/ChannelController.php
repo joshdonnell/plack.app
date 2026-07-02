@@ -11,6 +11,7 @@ use App\Http\Requests\CreateChannelRequest;
 use App\Http\Requests\DeleteChannelRequest;
 use App\Http\Requests\UpdateChannelRequest;
 use App\Models\Channel;
+use App\Models\Message;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Queries\ListWorkspace;
@@ -24,9 +25,17 @@ final readonly class ChannelController
 {
     public function show(#[CurrentUser] User $user, Workspace $workspace, Channel $channel, ListWorkspace $listWorkspace): Response
     {
+        $channel->load(['messages' => fn (HasMany $messages) => $messages->oldest()->with('sender')]);
+
         return Inertia::render('channel/show', [
             'workspace' => $workspace->load(['channels' => fn (HasMany $channels) => $channels->latest()]),
             'channel' => $channel,
+            'messages' => $channel->messages->map(fn (Message $message): array => [
+                'id' => $message->id,
+                'body' => $message->body,
+                'sender' => $message->sender->name,
+                'createdAt' => $message->created_at->toIso8601String(),
+            ]),
             'workspaces' => $listWorkspace->get($user),
             'canManage' => $user->is($workspace->owner),
         ]);

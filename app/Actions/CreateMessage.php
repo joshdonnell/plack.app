@@ -8,7 +8,7 @@ use App\Models\Channel;
 use App\Models\Message;
 use App\Models\User;
 
-final readonly class SendMessage
+final readonly class CreateMessage
 {
     public function handle(Channel $channel, User $sender, string $body): Message
     {

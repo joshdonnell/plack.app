@@ -70,6 +70,18 @@ export default function ChannelShow({
         router.reload({ only: ['messages'] });
     });
 
+    useEcho(
+        `workspaces.${workspace.id}`,
+        ['.ChannelCreated', '.ChannelDeleted'],
+        () => {
+            router.reload({ only: ['workspace'] });
+        },
+    );
+
+    useEcho(`workspaces.${workspace.id}`, '.ChannelUpdated', () => {
+        router.reload({ only: ['workspace', 'channel'] });
+    });
+
     return (
         <WorkspaceLayout
             workspace={workspace}

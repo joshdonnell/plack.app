@@ -14,15 +14,13 @@ final readonly class CreateMessage
 {
     public function handle(Channel $channel, User $sender, string $body): Message
     {
-        return DB::transaction(function () use ($channel, $sender, $body): Message {
-            $message = $channel->messages()->create([
-                'user_id' => $sender->id,
-                'body' => $body,
-            ]);
+        $message = DB::transaction(fn (): Message => $channel->messages()->create([
+            'user_id' => $sender->id,
+            'body' => $body,
+        ]));
 
-            broadcast(new MessageCreated($message))->toOthers();
+        broadcast(new MessageCreated($message))->toOthers();
 
-            return $message;
-        });
+        return $message;
     }
 }

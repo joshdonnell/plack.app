@@ -23,6 +23,11 @@ type Channel = {
     slug: string;
 };
 
+type SidebarChannel = Channel & {
+    unread_count: number;
+    muted: boolean;
+};
+
 type Message = {
     id: string;
     body: string;
@@ -37,7 +42,7 @@ type WorkspaceSummary = {
 };
 
 type Workspace = WorkspaceSummary & {
-    channels: Channel[];
+    channels: SidebarChannel[];
 };
 
 export default function ChannelShow({
@@ -68,7 +73,7 @@ export default function ChannelShow({
 
     useEcho(
         `workspaces.${workspace.id}`,
-        ['.ChannelCreated', '.ChannelDeleted'],
+        ['.ChannelCreated', '.ChannelDeleted', '.MessageCreated'],
         () => {
             router.reload({ only: ['workspace'] });
         },

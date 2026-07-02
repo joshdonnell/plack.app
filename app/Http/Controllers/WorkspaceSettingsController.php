@@ -26,7 +26,7 @@ final readonly class WorkspaceSettingsController
                 'name' => $workspace->name,
                 'slug' => $workspace->slug,
                 'type' => $workspace->type->value,
-                'channels' => $workspace->channels->map->only('id', 'name', 'slug')->values(),
+                'channels' => $workspace->channels->map->only('id')->values(),
             ],
             'owner' => $workspace->owner->only('id', 'name', 'email'),
             'members' => $workspace->members->map->only('id', 'name', 'email')->values(),
